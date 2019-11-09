@@ -45,11 +45,11 @@ const imageFilters = e => {
 
     for(let i = 0; i < dataPixels.length; i+=4)
     {
-        if(buttonid === "yellowish") 
+        if(buttonId === "yellowish") 
         {
-            dataPixels[i] = dataPixels[i+1];
-            dataPixels[i+1] = dataPixels[i];
-            dataPixels[i+2] = dataPixels[i];
+            dataPixels[i] = (dataPixels[i] + 228) / 2;
+            dataPixels[i+1] = (dataPixels[i+1] + 201) / 2;
+            dataPixels[i+2] = (dataPixels[i+2] + 145) / 2;
         }
         if(buttonId === "grayscale") 
         {
