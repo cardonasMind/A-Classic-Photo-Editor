@@ -7,33 +7,47 @@ const uploadPhoto = document.getElementById('upload-photo');
 const uploadingText = document.getElementById('uploading-text');
 
 const photoToCanvas = e => {
+    var reader = new FileReader();
     const image = new Image();
-    image.src = e;
+    //image.src = e;
 
-    uploadingText.innerText = "Uploading photo...";
     
-    image.onload = () => {
-        uploadingText.innerText = "";
-        editorPreview.width = image.width;
-        editorPreview.height = image.height;
-        ctx.drawImage(image, 0, 0);
+    
+    reader.readAsDataURL(e);
+
+    reader.onload = () => {
+        uploadingText.innerText = "Uploading photo...";
+    
+        image.src = reader.result;
+
+        image.onload = () => {
+            uploadingText.innerText = "";
+            editorPreview.width = image.width;
+            editorPreview.height = image.height;
+            ctx.drawImage(image, 0, 0);
+        }
     }
 }
 
-uploadPhoto.onchange = e => photoToCanvas(URL.createObjectURL(e.target.files[0]));
+uploadPhoto.onchange = e => photoToCanvas(e.target.files[0]);
 
 // RELOAD UPLOADED IMAGE BUTTON //
 const reloadPhoto = document.getElementById('reload-photo');
 
-reloadPhoto.onclick = () => photoToCanvas(URL.createObjectURL(uploadPhoto.files[0]));
+reloadPhoto.onclick = () => photoToCanvas(uploadPhoto.files[0]);
 
 /* FILTERS FOR THE IMAGE */
 const yellowishButton = document.getElementById('yellowish');
 const grayscaleButton = document.getElementById('grayscale');
 
+
+const classicFrame = document.getElementById('classic-frame');
+
 // Defining the functions for use the filters
 yellowishButton.onclick = e => imageFilters(e);
 grayscaleButton.onclick = e => imageFilters(e);
+
+classicFrame.onclick = e => imageFilters(e);
 
 const imageFilters = e => {
     const buttonId = e.target.id;
@@ -58,6 +72,10 @@ const imageFilters = e => {
             dataPixels[i+2] = dataPixels[i];
         }
     }
+    if(buttonId === "classicFrame") {
+        ctx.fillStyle = "red";
+        ctx.strokeRect(100, 100, 0 ,0);
+    }
         
     ctx.putImageData(imageData, 0, 0);
 }
@@ -74,7 +92,7 @@ const getReferenceImages = () => {
         photosContainer.appendChild(image);
 
         image.onclick = (e) => {
-            photoToCanvas(e.target.src);
+            photoToCanvas(e.target);
         }
     }
 }
